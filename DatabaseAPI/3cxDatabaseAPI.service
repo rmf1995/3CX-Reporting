@@ -1,0 +1,15 @@
+[Unit]
+Description=3CX DatabaseAPI Service
+After=syslog.target network.target
+
+[Service]
+StartLimitInterval=5
+StartLimitBurst=10
+ExecStart=/usr/bin/DatabaseAPI
+User=root
+Restart=always
+RestartSec=120
+
+[Install]
+WantedBy=multi-user.target
+

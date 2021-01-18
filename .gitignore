@@ -16,5 +16,6 @@
 
 3CXtoDatabase/3CXtoDatabase
 3CXTools/3CXTools
+DatabaseAPI/DatabaseAPI
 Scripts/DB_CONFIG_FILE
 config.json
