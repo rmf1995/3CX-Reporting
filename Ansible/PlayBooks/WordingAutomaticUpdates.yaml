@@ -1,0 +1,124 @@
+- hosts: all
+  vars:
+    Json1: "/var/lib/3cxpbx/Data/Http/wwwroot/l10n/en_GB.json"
+    Json2: "/var/lib/3cxpbx/Data/Http/wwwroot/l10n/en.json"
+    Key1: ".SYSTEM_STATUS.SECTIONS.UPDATES.AUTOMATIC_UPDATES"
+    Key2: ".SYSTEM_STATUS.SECTIONS.UPDATES.AUTOMATIC_UPDATES_INFO"
+    Key3: ".SYSTEM_STATUS.SECTIONS.UPDATES.AUTOMATIC_UPDATES_INFO2"
+    Key4: ".SYSTEM_STATUS.SECTIONS.UPDATES.AUTOMATIC_UPDATES_INFO3"
+    Key5: ".HEADER.UPDATES.DEBIAN_UPDATES_INFO"
+    Value1: "Automatically update 3CX - This option should not be used for production servers."
+    Value2: "Selecting Automatic Updates, or upgrading 3CX manually, can cause instability and possibly incur support charges to correct any problems caused.</br>"
+    Value3: "Our 3CX team will install updates once they have been fully tested and deemed safe for use in production environments.</br>"
+    Value4: "If you require your PBX to be updated urgently, please contact support. Do not attempt a manual upgrade."
+    Value5: ""
+  tasks:
+  - name: Install jq
+    apt:
+      name: jq
+      state: present
+      update_cache: yes
+      
+  - name: Create l10nBackups Dir
+    file:
+      path: /root/l10nBackups
+      state: directory
+      
+  - name: Backup l10n Files
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      remote_src: true   
+    with_items:
+      - { src:  '/var/lib/3cxpbx/Data/Http/wwwroot/l10n/en.json', dest: '/root/l10nBackups/en.json'}
+      - { src:  '/var/lib/3cxpbx/Data/Http/wwwroot/l10n/en_GB.json', dest: '/root/l10nBackups/en_GB.json'}
+
+  - name: "Modify AUTOMATIC_UPDATES en_GB.json"
+    command: jq "{{Key1}}=\"{{Value1}}\"" "{{ Json1 }}"
+    register: json
+
+  - name: Write the AUTOMATIC_UPDATES en_GB.json
+    copy:
+      content: "{{ json.stdout }}"
+      dest: "{{ Json1 }}"
+
+  - name: "Modify AUTOMATIC_UPDATES_INFO en_GB.json"
+    command: jq "{{Key2}}=\"{{Value2}}\"" "{{ Json1 }}"
+    register: json
+
+  - name: Write the AUTOMATIC_UPDATES_INFO en_GB.json
+    copy:
+      content: "{{ json.stdout }}"
+      dest: "{{ Json1 }}"
+
+  - name: "Modify AUTOMATIC_UPDATES_INFO2 en_GB.json"
+    command: jq "{{Key3}}=\"{{Value3}}\"" "{{ Json1 }}"
+    register: json
+
+  - name: Write the AUTOMATIC_UPDATES_INFO2 en_GB.json
+    copy:
+      content: "{{ json.stdout }}"
+      dest: "{{ Json1 }}"
+
+  - name: "Modify AUTOMATIC_UPDATES_INFO3 en_GB.json"
+    command: jq "{{Key4}}=\"{{Value4}}\"" "{{ Json1 }}"
+    register: json
+
+  - name: Write the AUTOMATIC_UPDATES_INFO3 en_GB.json
+    copy:
+      content: "{{ json.stdout }}"
+      dest: "{{ Json1 }}"
+
+  - name: "Modify DEBIAN_UPDATES_INFO en_GB.json"
+    command: jq "{{Key5}}=\"{{Value5}}\"" "{{ Json1 }}"
+    register: json
+
+  - name: Write the DEBIAN_UPDATES_INFO en_GB.json
+    copy:
+      content: "{{ json.stdout }}"
+      dest: "{{ Json1 }}"
+
+  - name: "Modify AUTOMATIC_UPDATES en.json"
+    command: jq "{{Key1}}=\"{{Value1}}\"" "{{ Json2 }}"
+    register: json
+
+  - name: Write the AUTOMATIC_UPDATES en.json
+    copy:
+      content: "{{ json.stdout }}"
+      dest: "{{ Json2 }}"
+
+  - name: "Modify AUTOMATIC_UPDATES_INFO en.json"
+    command: jq "{{Key2}}=\"{{Value2}}\"" "{{ Json2 }}"
+    register: json
+
+  - name: Write the AUTOMATIC_UPDATES_INFO en.json
+    copy:
+      content: "{{ json.stdout }}"
+      dest: "{{ Json2 }}"
+
+  - name: "Modify AUTOMATIC_UPDATES_INFO2 en.json"
+    command: jq "{{Key3}}=\"{{Value3}}\"" "{{ Json2 }}"
+    register: json
+
+  - name: Write the AUTOMATIC_UPDATES_INFO2 en.json
+    copy:
+      content: "{{ json.stdout }}"
+      dest: "{{ Json2 }}"
+
+  - name: "Modify AUTOMATIC_UPDATES_INFO3 en.json"
+    command: jq "{{Key4}}=\"{{Value4}}\"" "{{ Json2 }}"
+    register: json
+
+  - name: Write the AUTOMATIC_UPDATES_INFO3 en.json
+    copy:
+      content: "{{ json.stdout }}"
+      dest: "{{ Json2 }}"
+
+  - name: "Modify DEBIAN_UPDATES_INFO en.json"
+    command: jq "{{Key5}}=\"{{Value5}}\"" "{{ Json2 }}"
+    register: json
+
+  - name: Write the DEBIAN_UPDATES_INFO en.json
+    copy:
+      content: "{{ json.stdout }}"
+      dest: "{{ Json2 }}"
