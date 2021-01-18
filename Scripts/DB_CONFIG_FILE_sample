@@ -1,0 +1,7 @@
+#!/bin/bash
+
+BaseDIR="/opt/3CX-Reporting/DBbackups"
+DBhost="localhost"
+DBport="PORT"
+DBuser="USER"
+DBpass="PASSWORD"
