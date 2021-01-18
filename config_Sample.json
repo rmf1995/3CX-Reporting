@@ -1,0 +1,12 @@
+{
+   "Database":{
+      "User":"USER",
+      "Pass":"PASSWORD",
+      "Name":"3cxReporting",
+      "Host":"localhost",
+      "Port":"3306"
+   },
+   "OpsGenie":{
+      "APIKey":"APIKey"
+   }
+}
