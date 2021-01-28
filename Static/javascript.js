@@ -134,6 +134,7 @@ function drawRow(rowData) {
         row.append($("<td style=\"text-align:center;background-color:red\">TRUE</td>"));
     }
     row.append($("<td style=\"text-align:center\">" + rowData.License + "</td>"));
+    row.append($("<td style=\"text-align:center\">" + rowData.LicenseKey + "</td>"));
     if (rowData.LicenseExpiration == null) {
         row.append($("<td style=\"text-align:center;background-color:red\">" + epochToDate(rowData.LicenseExpiration) + "</td>"));
     } else if ((rowData.LicenseExpiration - (Date.now() / 1000)) <= 2678400) {
