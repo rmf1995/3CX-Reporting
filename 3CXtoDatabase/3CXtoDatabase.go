@@ -394,11 +394,11 @@ func GetData() {
 			log.Println("FAILED Getting data from -> " + s.Name)
 			continue
 		}
-		update3cx, err := db.Prepare("UPDATE servers SET Version=?, FQDN=?, CallRecordingUsage=?, MaxSimCalls=?, ExtTotal=?, OSswap=?, OSDiskSpace=?, AutoUpdate=?, License=?,LicenseKey=?, LicenseExpiration=?, ResellerName=?,lastUpdated=? WHERE id=?")
+		update3cx, err := db.Prepare("UPDATE servers SET Version=?, FQDN=?, CallRecordingUsage=?, RecordingUsedSpace=?, RecordingQuota=?, MaxSimCalls=?, ExtTotal=?, OSswap=?, OSDiskSpace=?, AutoUpdate=?, License=?,LicenseKey=?, LicenseExpiration=?, ResellerName=?,lastUpdated=? WHERE id=?")
 		if err != nil {
 			panic(err.Error())
 		}
-		update3cx.Exec(s.SvrSystemStatus.Version, s.SvrSystemStatus.FQDN, RecordingUsage, s.SvrSystemStatus.MaxSimCalls, s.SvrSystemStatus.ExtensionsTotal, TotalSwap, TotalDiskSpace, s.SvrUpdates.ActiveObject.TcxPbxUpdates.Value, License, s.SvrSystemStatus.LicenseKey, LicenseExpirationEpoch, s.SvrSystemStatus.ResellerName, timenow, r2.id)
+		update3cx.Exec(s.SvrSystemStatus.Version, s.SvrSystemStatus.FQDN, RecordingUsage, s.SvrAdditionalStatus.RecordingUsedSpace, s.SvrAdditionalStatus.RecordingQuota, s.SvrSystemStatus.MaxSimCalls, s.SvrSystemStatus.ExtensionsTotal, TotalSwap, TotalDiskSpace, s.SvrUpdates.ActiveObject.TcxPbxUpdates.Value, License, s.SvrSystemStatus.LicenseKey, LicenseExpirationEpoch, s.SvrSystemStatus.ResellerName, timenow, r2.id)
 	}
 
 	defer db.Close()
