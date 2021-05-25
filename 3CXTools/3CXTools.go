@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -18,6 +19,7 @@ import (
 	"github.com/opsgenie/opsgenie-go-sdk-v2/alert"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/client"
 	"github.com/spf13/viper"
+	"github.com/zpatrick/go-bytesize"
 )
 
 // C config var from strut
@@ -52,6 +54,7 @@ type server struct {
 	Location               string `mapstructure:"Location"`
 	URL                    string `mapstructure:"URL"`
 	UserName               string `mapstructure:"UserName"`
+	RecordingQuotaSold     uint   `mapstructure:"RecordingQuotaSold"`
 	PwStateID              string `mapstructure:"PwStateID"`
 	lastUpdated            string `mapstructure:"lastUpdated"`
 	SvrPasswordStateRecord PasswordStateRecord
@@ -615,6 +618,69 @@ func Get3CXwithAutoUpdate() {
 
 }
 
+// bytetoGiB receives byte and Returns String (1GB/5GB)
+func bytetoGiB(bytes uint) string {
+	RecordingQuotaBytes := bytesize.Bytesize(bytes)
+	RecordingQuotaGibibytes := RecordingQuotaBytes.Gibibytes()
+
+	Result := fmt.Sprintf("%.2f", RecordingQuotaGibibytes) + "GB"
+	return Result
+}
+
+// Get3CXwithChangedRecordingQuota Finds 3CX with RecordingQuota Changed
+func Get3CXwithChangedRecordingQuota() {
+	db := dbConn()
+
+	var queryStr string = "SELECT id, Name, RecordingQuota, RecordingQuotaSold, URL FROM servers WHERE lastUpdated IS NOT NULL and RecordingQuota IS NOT NULL ORDER BY Name ASC"
+	rows, err := db.Query(queryStr)
+	if err != nil {
+		log.Println(err)
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		// Scan one Server record
+		var r server
+		if err := rows.Scan(&r.id, &r.Name, &r.SvrAdditionalStatus.RecordingQuota, &r.RecordingQuotaSold, &r.URL); err != nil {
+			log.Println(err)
+		}
+		servers.server = append(servers.server, r)
+	}
+
+	for i, _ := range servers.server {
+		s := servers.server[i]
+
+		if s.SvrAdditionalStatus.RecordingQuota != s.RecordingQuotaSold {
+			opsgenieCreateAlarm(s.Name+" Recording Quota Modified (From: "+bytetoGiB(s.RecordingQuotaSold)+" To: "+bytetoGiB(s.SvrAdditionalStatus.RecordingQuota)+")", s.URL)
+			//log.Println(s.Name + " Recording Quota Modified (From: " + bytetoGiB(s.RecordingQuotaSold) + " To: " + bytetoGiB(s.SvrAdditionalStatus.RecordingQuota) + ")")
+		} else {
+			//log.Println(s.Name + " -> Recording Quota OK")
+		}
+	}
+
+	defer db.Close()
+
+}
+
+// ResetRecordingQuota Resets the Sold Quota to the current
+func ResetRecordingQuota(name string) {
+	db := dbConn()
+	name = strings.TrimSuffix(name, "\n")
+	//log.Println("UPDATE servers SET RecordingQuotaSold=RecordingQuota where Name like \"%" + name + "%\"")
+
+	sqlStatement := `UPDATE 3cxReporting.servers SET RecordingQuotaSold=RecordingQuota where Name like "%` + name + `%";`
+	log.Println(sqlStatement)
+	_, err := db.Exec(sqlStatement)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Printf("Recording Quota Reset for %s", name)
+
+	defer db.Close()
+
+}
+
 func main() {
 	log.Printf("       3CX Tools by Ricardo Ferreira")
 	viper.SetConfigName("config") // name of config file (without extension)
@@ -643,6 +709,13 @@ func main() {
 		switch arg {
 		case "--Get3CXwithAutoUpdate":
 			Get3CXwithAutoUpdate()
+		case "--Get3CXwithChangedRecordingQuota":
+			Get3CXwithChangedRecordingQuota()
+		case "--ResetRecordingQuota":
+			reader := bufio.NewReader(os.Stdin)
+			fmt.Print("3CX Name (example-3cx-1): ")
+			name, _ := reader.ReadString('\n')
+			ResetRecordingQuota(name)
 		case "--GetFailoverTimeInterval":
 			GetFailoverTimeInterval()
 		case "--SetFailoverTimeInterval":
