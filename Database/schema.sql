@@ -75,6 +75,9 @@ CREATE TABLE `servers` (
   `Version` varchar(255) DEFAULT NULL,
   `FQDN` varchar(255) DEFAULT NULL,
   `CallRecordingUsage` varchar(255) DEFAULT NULL,
+  `RecordingUsedSpace` bigint(20) DEFAULT NULL,
+  `RecordingQuota` bigint(20) DEFAULT NULL,
+  `RecordingQuotaSold` bigint(20) DEFAULT NULL,
   `MaxSimCalls` int(11) DEFAULT NULL,
   `ExtTotal` int(11) DEFAULT NULL,
   `vcpus` varchar(255) DEFAULT NULL,
@@ -83,12 +86,13 @@ CREATE TABLE `servers` (
   `OSDiskSpace` int(11) DEFAULT NULL,
   `AutoUpdate` tinyint(1) DEFAULT NULL,
   `License` varchar(255) DEFAULT NULL,
+  `LicenseKey` varchar(255) DEFAULT NULL,
   `LicenseExpiration` varchar(255) DEFAULT NULL,
   `ResellerName` varchar(255) DEFAULT NULL,
   `AnsibleUpdates` tinyint(1) DEFAULT 1,
   `lastUpdated` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=373 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=432 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -100,4 +104,4 @@ CREATE TABLE `servers` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-18 14:47:13
+-- Dump completed on 2021-05-25 14:10:23
