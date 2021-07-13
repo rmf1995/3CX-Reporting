@@ -122,6 +122,11 @@ function drawRow(rowData) {
     row.append($("<td>" + rowData.Version + "</td>"));
     row.append($("<td><a href=\"https://"+ rowData.FQDN +":5001\" target=\"_blank\">" + rowData.FQDN + "</a></td>"));
     row.append($("<td style=\"text-align:center\">" + rowData.CallRecordingUsage + "</td>"));
+    if (rowData.beespoke == null || rowData.beespoke == "" ) {
+        row.append($("<td style=\"text-align:center\">NO</td>"));
+    } else {
+        row.append($("<td style=\"text-align:center\">" + rowData.beespoke + "</td>"));
+    }
     row.append($("<td style=\"text-align:center\">" + rowData.MaxSimCalls + "</td>"));
     row.append($("<td style=\"text-align:center\">" + rowData.ExtTotal + "</td>"));
     row.append($("<td style=\"text-align:center\">" + rowData.vcpus + "</td>"));

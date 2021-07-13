@@ -36,6 +36,10 @@
                label="Customer ID"
                required
             ></v-text-field>
+            <v-text-field
+               v-model="item.Beespoke"
+               label="Beespoke"
+            ></v-text-field>
             <v-btn
                class="mr-4"
                @click="addItem"

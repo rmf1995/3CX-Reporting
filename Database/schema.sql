@@ -1,8 +1,8 @@
--- MySQL dump 10.18  Distrib 10.3.27-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.19  Distrib 10.3.29-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: 3cxReporting
 -- ------------------------------------------------------
--- Server version       10.3.27-MariaDB-0+deb10u1
+-- Server version       10.3.29-MariaDB-0+deb10u1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -89,10 +89,11 @@ CREATE TABLE `servers` (
   `LicenseKey` varchar(255) DEFAULT NULL,
   `LicenseExpiration` varchar(255) DEFAULT NULL,
   `ResellerName` varchar(255) DEFAULT NULL,
+  `beespoke` varchar(255) DEFAULT NULL,
   `AnsibleUpdates` tinyint(1) DEFAULT 1,
   `lastUpdated` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=432 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -104,4 +105,4 @@ CREATE TABLE `servers` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-25 14:10:23
+-- Dump completed on 2021-07-13 14:34:31
