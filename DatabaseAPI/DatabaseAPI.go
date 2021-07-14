@@ -38,7 +38,7 @@ type server struct {
 	UserName   string `json : "UserName"`
 	PwStateID  string `json : "PwStateID"`
 	CustomerID string `json : "CustomerID"`
-	Beespoke   string `json : "Beespoke"`
+	Bespoke   string `json : "Bespoke"`
 }
 type servers struct {
 	servers []server `json:"employee"`
@@ -140,14 +140,14 @@ func create3CX(c echo.Context) error {
 		return err
 	}
 	//
-	sql := "INSERT INTO servers (Name, Location, URL, UserName, PwStateID, CustomerID, beespoke) VALUES ( ?, ?, ?, ?, ?, ?, ?)"
+	sql := "INSERT INTO servers (Name, Location, URL, UserName, PwStateID, CustomerID, bespoke) VALUES ( ?, ?, ?, ?, ?, ?, ?)"
 	stmt, err := db.Prepare(sql)
 
 	if err != nil {
 		fmt.Print(err.Error())
 	}
 	defer stmt.Close()
-	result, err2 := stmt.Exec(server.Name, server.Location, server.URL, server.UserName, server.PwStateID, server.CustomerID, server.Beespoke)
+	result, err2 := stmt.Exec(server.Name, server.Location, server.URL, server.UserName, server.PwStateID, server.CustomerID, server.Bespoke)
 
 	// Exit if we get an error
 	if err2 != nil {
@@ -169,14 +169,14 @@ func edit3CX(c echo.Context) error {
 	var username string
 	var pwstateID string
 	var customerID string
-	var beespoke string
+	var bespoke string
 
-	err := db.QueryRow("SELECT id,Name,Location,URL,UserName,PwStateID,CustomerID,beespoke FROM servers WHERE id = ?", serverID).Scan(&id, &name, &location, &url, &username, &pwstateID, &customerID, &beespoke)
+	err := db.QueryRow("SELECT id,Name,Location,URL,UserName,PwStateID,CustomerID,bespoke FROM servers WHERE id = ?", serverID).Scan(&id, &name, &location, &url, &username, &pwstateID, &customerID, &bespoke)
 	if err != nil {
 		//log.Println(err)
 	}
 
-	response := server{ID: id, Name: name, Location: location, URL: url, UserName: username, PwStateID: pwstateID, CustomerID: customerID, Beespoke: beespoke}
+	response := server{ID: id, Name: name, Location: location, URL: url, UserName: username, PwStateID: pwstateID, CustomerID: customerID, Bespoke: bespoke}
 	defer db.Close()
 	return c.JSON(http.StatusOK, response)
 }
@@ -191,7 +191,7 @@ func update3CX(c echo.Context) error {
 	}
 	log.Println(server)
 
-	sql := "UPDATE servers SET Name=?, Location=?, URL=?, UserName=?, PwStateID=?, CustomerID=?, beespoke=? WHERE id=?"
+	sql := "UPDATE servers SET Name=?, Location=?, URL=?, UserName=?, PwStateID=?, CustomerID=?, bespoke=? WHERE id=?"
 	stmt, err := db.Prepare(sql)
 
 	if err != nil {
@@ -200,7 +200,7 @@ func update3CX(c echo.Context) error {
 
 	defer stmt.Close()
 
-	result, err2 := stmt.Exec(server.Name, server.Location, server.URL, server.UserName, server.PwStateID, server.CustomerID, server.Beespoke, requestedid)
+	result, err2 := stmt.Exec(server.Name, server.Location, server.URL, server.UserName, server.PwStateID, server.CustomerID, server.Bespoke, requestedid)
 	log.Println(result)
 	// Exit if we get an error
 	if err2 != nil {

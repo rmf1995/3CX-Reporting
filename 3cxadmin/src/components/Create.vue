@@ -37,8 +37,8 @@
                required
             ></v-text-field>
             <v-text-field
-               v-model="item.Beespoke"
-               label="Beespoke"
+               v-model="item.Bespoke"
+               label="Bespoke"
             ></v-text-field>
             <v-btn
                class="mr-4"
